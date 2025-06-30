@@ -50,7 +50,7 @@ export async function generateMetadata({
         title: `${data.emoji} ${data.name}`,
         description: `${data.creator}가 만든 ${data.category} 퀴즈 문서 - 총 ${data.totalQuizCount}개의 퀴즈`,
         type: "article",
-        url: `https://picktoss.com/explore/detail/${id}`,
+        url: `${baseUrl}/explore/detail/${id}`,
         siteName: "PickToss",
         locale: "ko_KR",
         images: [
@@ -73,7 +73,7 @@ export async function generateMetadata({
     console.error("Failed to fetch document data:", error);
 
     // 폴백 메타데이터
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
     return {
       title: "픽토스: 나를 성장시키는 AI 퀴즈",
       description: "나를 성장시키는 똑똑한 퀴즈",
