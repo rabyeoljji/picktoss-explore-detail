@@ -22,8 +22,8 @@ export interface GetPublicSingleDocumentResponse {
   isOwner: boolean;
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const { id } = params;
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const response = await fetch(
     `${process.env.API_URL!}/documents/${id}/public`
   );
