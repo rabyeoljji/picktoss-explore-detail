@@ -1,3 +1,4 @@
+import { isbot } from "isbot";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -104,6 +105,28 @@ export async function generateMetadata({
   }
 }
 
+/** ❶ 미리보기 전용 UA(국내·메신저) — 필요 시 추가 */
+const PREVIEW_UA = [
+  /kakaotalk-scrap/i,
+  /Slackbot-LinkExpanding/i,
+  /Slack-ImgProxy/i,
+  /Discordbot/i,
+  /WhatsApp/i,
+  /TelegramBot/i,
+  /SkypeUriPreview/i,
+  /Pinterest/i,
+  /Line\//i, // LINE (iOS/Android 모두)
+  /Viber/i,
+  /facebookexternalhit/i, // FB App → 이미 isbot 에 포함돼 있지만 명시
+];
+
+/** ❷ UA 검사 함수 */
+export function isCrawler(ua = ""): boolean {
+  if (!ua) return false;
+  // isbot → 글로벌 봇 대부분 탐지, PREVIEW_UA → 국내/메신저 보강
+  return isbot(ua) || PREVIEW_UA.some((re) => re.test(ua));
+}
+
 export default async function ExploreDetailPage({
   params,
 }: {
@@ -112,10 +135,11 @@ export default async function ExploreDetailPage({
   const { id } = await params;
   const ua = (await headers()).get("user-agent") ?? "";
 
-  const isCrawler = /kakaotalk-scrap|facebookexternalhit|Twitterbot/i.test(ua);
-  if (!isCrawler) {
-    redirect(`https://picktoss.com/explore/detail/${id}`); // 일반 브라우저만 이동
+  if (!isCrawler(ua)) {
+    // 브라우저만 루트 도메인으로 이동
+    redirect(`https://picktoss.com/explore/detail/${id}`);
   }
+
   // 크롤러에게는 OG 메타태그가 포함된 정적 HTML을 반환
   return null;
 }
