@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 export interface GetPublicSingleDocumentQuizDto {
   id: number;
   answer: string;
@@ -71,7 +73,7 @@ export async function generateMetadata({
     console.error("Failed to fetch document data:", error);
 
     // 폴백 메타데이터
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://picktoss.com";
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     return {
       title: "픽토스: 나를 성장시키는 AI 퀴즈",
       description: "나를 성장시키는 똑똑한 퀴즈",
@@ -79,7 +81,7 @@ export async function generateMetadata({
         title: "픽토스: 나를 성장시키는 AI 퀴즈",
         description: "나를 성장시키는 똑똑한 퀴즈",
         type: "article",
-        url: `https://picktoss.com/explore/detail/${id}`,
+        url: `${baseUrl}/explore/detail/${id}`,
         siteName: "PickToss",
         locale: "ko_KR",
         images: [
@@ -101,6 +103,11 @@ export async function generateMetadata({
   }
 }
 
-export default async function ExploreDetailPage() {
-  return null;
+export default async function ExploreDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  redirect(`https://picktoss.com/explore/detail/${id}`);
 }
