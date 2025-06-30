@@ -47,10 +47,9 @@ export async function generateMetadata({
 
     return {
       title: `${data.emoji} ${data.name} - 픽토스`,
-      description: `${data.creator}가 만든 ${data.category} 퀴즈 문서 - 총 ${data.totalQuizCount}개의 퀴즈`,
       openGraph: {
         title: `${data.emoji} ${data.name}`,
-        description: `${data.creator}가 만든 ${data.category} 퀴즈 문서 - 총 ${data.totalQuizCount}개의 퀴즈`,
+        description: `${data.category} 퀴즈 - 총 ${data.totalQuizCount}개의 문제`,
         type: "article",
         url: `${baseUrl}/explore/detail/${id}`,
         siteName: "picktoss",
@@ -67,7 +66,7 @@ export async function generateMetadata({
       twitter: {
         card: "summary_large_image",
         title: `${data.emoji} ${data.name}`,
-        description: `${data.creator}가 만든 ${data.category} 퀴즈 문서 - 총 ${data.totalQuizCount}개의 퀴즈`,
+        description: `${data.category} 퀴즈 - 총 ${data.totalQuizCount}개의 문제`,
         images: [`${baseUrl}/opengraph-quiz.png`],
       },
     };
