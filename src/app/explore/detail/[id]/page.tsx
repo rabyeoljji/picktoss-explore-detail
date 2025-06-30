@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 export interface GetPublicSingleDocumentQuizDto {
@@ -51,7 +52,7 @@ export async function generateMetadata({
         description: `${data.creator}가 만든 ${data.category} 퀴즈 문서 - 총 ${data.totalQuizCount}개의 퀴즈`,
         type: "article",
         url: `${baseUrl}/explore/detail/${id}`,
-        siteName: "PickToss",
+        siteName: "picktoss",
         locale: "ko_KR",
         images: [
           {
@@ -106,8 +107,15 @@ export async function generateMetadata({
 export default async function ExploreDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params;
-  redirect(`https://picktoss.com/explore/detail/${id}`);
+  const { id } = params;
+  const ua = (await headers()).get("user-agent") ?? "";
+
+  const isCrawler = /kakaotalk-scrap|facebookexternalhit|Twitterbot/i.test(ua);
+  if (!isCrawler) {
+    redirect(`https://picktoss.com/explore/detail/${id}`); // 일반 브라우저만 이동
+  }
+  // 크롤러에게는 OG 메타태그가 포함된 정적 HTML을 반환
+  return null;
 }
