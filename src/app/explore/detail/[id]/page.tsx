@@ -104,9 +104,10 @@ export async function generateMetadata({
   }
 }
 
-/** ❶ 미리보기 전용 UA(국내·메신저) — 필요 시 추가 */
-const PREVIEW_UA = [
-  /kakaotalk-scrap/i,
+/** 1)  ❗‘스크랩 전용’ UA 목록 (필요 시 추가) */
+const SCRAP_BOTS = [
+  /kakaotalk-scrap/i, // Kakao 미리보기
+  /facebookexternalhit/i, // Facebook / Instagram 카드
   /Slackbot-LinkExpanding/i,
   /Slack-ImgProxy/i,
   /Discordbot/i,
@@ -114,16 +115,28 @@ const PREVIEW_UA = [
   /TelegramBot/i,
   /SkypeUriPreview/i,
   /Pinterest/i,
-  /Line\//i, // LINE (iOS/Android 모두)
+  /Line\//i,
   /Viber/i,
-  /facebookexternalhit/i, // FB App → 이미 isbot 에 포함돼 있지만 명시
 ];
 
-/** ❷ UA 검사 함수 */
-function isCrawler(ua = ""): boolean {
+/** 2)  ❗‘사람인데 isbot 에서 오탐되는’ in-app UA 예외 목록 */
+const FALSE_POSITIVE = [
+  /KAKAOTALK\/\d/i, // Kakao 인‑앱 브라우저
+  // 필요하면 /DaumApp/i 등 추가
+];
+
+/** 3)  UA 판정 함수 */
+function isCrawler(ua: string): boolean {
   if (!ua) return false;
-  // isbot → 글로벌 봇 대부분 탐지, PREVIEW_UA → 국내/메신저 보강
-  return isbot(ua) || PREVIEW_UA.some((re) => re.test(ua));
+
+  // (A) in‑app 예외 → 무조건 ‘사람’으로 취급
+  if (FALSE_POSITIVE.some((re) => re.test(ua))) return false;
+
+  // (B) 스크랩 봇 → 무조건 ‘봇’
+  if (SCRAP_BOTS.some((re) => re.test(ua))) return true;
+
+  // (C) 나머지는 isbot 결과에 따름
+  return isbot(ua);
 }
 
 export default async function ExploreDetailPage({
