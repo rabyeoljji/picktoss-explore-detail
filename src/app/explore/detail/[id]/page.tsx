@@ -49,7 +49,7 @@ export async function generateMetadata({
       title: `${data.emoji} ${data.name} - 픽토스`,
       openGraph: {
         title: `${data.emoji} ${data.name}`,
-        description: `${data.category} 퀴즈 - 총 ${data.totalQuizCount}개의 문제`,
+        description: `${data.category} - ${data.totalQuizCount}개의 문제`,
         type: "article",
         url: `${baseUrl}/explore/detail/${id}`,
         siteName: "picktoss",
@@ -66,7 +66,7 @@ export async function generateMetadata({
       twitter: {
         card: "summary_large_image",
         title: `${data.emoji} ${data.name}`,
-        description: `${data.category} 퀴즈 - 총 ${data.totalQuizCount}개의 문제`,
+        description: `${data.category} - ${data.totalQuizCount}개의 문제`,
         images: [`${baseUrl}/opengraph-quiz.png`],
       },
     };
@@ -120,7 +120,7 @@ const PREVIEW_UA = [
 ];
 
 /** ❷ UA 검사 함수 */
-export function isCrawler(ua = ""): boolean {
+function isCrawler(ua = ""): boolean {
   if (!ua) return false;
   // isbot → 글로벌 봇 대부분 탐지, PREVIEW_UA → 국내/메신저 보강
   return isbot(ua) || PREVIEW_UA.some((re) => re.test(ua));
