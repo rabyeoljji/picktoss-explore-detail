@@ -107,9 +107,9 @@ export async function generateMetadata({
 export default async function ExploreDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
+  const { id } = await params;
   const ua = (await headers()).get("user-agent") ?? "";
 
   const isCrawler = /kakaotalk-scrap|facebookexternalhit|Twitterbot/i.test(ua);
