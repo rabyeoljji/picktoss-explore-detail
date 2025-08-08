@@ -34,9 +34,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   try {
-    const response = await fetch(
-      `${process.env.API_URL!}/documents/${id}/public`
-    );
+    const response = await fetch(`${process.env.API_URL!}/documents/${id}`);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -239,7 +237,7 @@ export default async function ExploreDetailPage({
   // 크롤러를 위한 JSON-LD 구조화 데이터 및 HTML 콘텐츠 생성
   let jsonLd = null;
   let quizData = null;
-  
+
   try {
     const response = await fetch(
       `${process.env.API_URL!}/documents/${id}/public`
@@ -335,8 +333,19 @@ export default async function ExploreDetailPage({
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>{quizData ? `${quizData.emoji} ${quizData.name} - 픽토스` : "픽토스 퀴즈"}</title>
-        <meta name="description" content={quizData ? `${quizData.category} - ${quizData.totalQuizCount}개의 문제` : "AI가 만든 똑똑한 퀴즈로 재미있게 학습하세요"} />
+        <title>
+          {quizData
+            ? `${quizData.emoji} ${quizData.name} - 픽토스`
+            : "픽토스 퀴즈"}
+        </title>
+        <meta
+          name="description"
+          content={
+            quizData
+              ? `${quizData.category} - ${quizData.totalQuizCount}개의 문제`
+              : "AI가 만든 똑똑한 퀴즈로 재미있게 학습하세요"
+          }
+        />
         {jsonLd && (
           <script
             type="application/ld+json"
@@ -360,43 +369,57 @@ export default async function ExploreDetailPage({
             <p>나를 성장시키는 AI 퀴즈</p>
           </nav>
         </header>
-        
+
         <main>
           {quizData ? (
             <article>
               <header>
-                <h1>{quizData.emoji} {quizData.name}</h1>
+                <h1>
+                  {quizData.emoji} {quizData.name}
+                </h1>
                 <div>
                   <span>카테고리: {quizData.category}</span>
                   <span>작성자: {quizData.creator}</span>
                   <span>총 {quizData.totalQuizCount}개의 문제</span>
                 </div>
               </header>
-              
+
               <section>
                 <h2>퀴즈 정보</h2>
                 <ul>
                   <li>도전한 사람: {quizData.tryCount}명</li>
                   <li>북마크: {quizData.bookmarkCount}개</li>
-                  <li>생성일: {new Date(quizData.createdAt).toLocaleDateString('ko-KR')}</li>
+                  <li>
+                    생성일:{" "}
+                    {new Date(quizData.createdAt).toLocaleDateString("ko-KR")}
+                  </li>
                 </ul>
               </section>
-              
+
               {quizData.quizzes && quizData.quizzes.length > 0 && (
                 <section>
                   <h2>퀴즈 문제 목록</h2>
-                  <p>총 {quizData.quizzes.length}개의 문제가 포함되어 있습니다. 각 문제를 통해 {quizData.category} 분야의 지식을 학습할 수 있습니다.</p>
+                  <p>
+                    총 {quizData.quizzes.length}개의 문제가 포함되어 있습니다.
+                    각 문제를 통해 {quizData.category} 분야의 지식을 학습할 수
+                    있습니다.
+                  </p>
                   <div>
                     {quizData.quizzes.map((quiz, index) => (
                       <article key={quiz.id}>
                         <header>
                           <h3>문제 {index + 1}</h3>
-                          <span>유형: {quiz.quizType === 'MULTIPLE_CHOICE' ? '객관식 문제' : '순서맞추기 문제'}</span>
+                          <span>
+                            유형:{" "}
+                            {quiz.quizType === "MULTIPLE_CHOICE"
+                              ? "객관식 문제"
+                              : "순서맞추기 문제"}
+                          </span>
                         </header>
                         <div>
                           <h4>문제</h4>
                           <p>{quiz.question}</p>
-                          
+
                           {quiz.options && quiz.options.length > 0 && (
                             <div>
                               <h5>선택지</h5>
@@ -407,31 +430,64 @@ export default async function ExploreDetailPage({
                               </ul>
                             </div>
                           )}
-                          
+
                           <div>
                             <h5>학습 포인트</h5>
-                            <p>이 문제는 {quizData.category} 분야의 핵심 개념을 다루고 있습니다. 정답과 상세한 해설은 픽토스 플랫폼에서 확인하실 수 있습니다.</p>
+                            <p>
+                              이 문제는 {quizData.category} 분야의 핵심 개념을
+                              다루고 있습니다. 정답과 상세한 해설은 픽토스
+                              플랫폼에서 확인하실 수 있습니다.
+                            </p>
                           </div>
                         </div>
                       </article>
                     ))}
                   </div>
-                  
+
                   <div>
                     <h3>문제 유형 분석</h3>
                     <p>
-                      이 퀴즈는 {quizData.quizzes.filter(q => q.quizType === 'MULTIPLE_CHOICE').length}개의 객관식 문제와 {' '}
-                      {quizData.quizzes.filter(q => q.quizType === 'MIX_UP').length}개의 순서맞추기 문제로 구성되어 있습니다.
+                      이 퀴즈는{" "}
+                      {
+                        quizData.quizzes.filter(
+                          (q) => q.quizType === "MULTIPLE_CHOICE"
+                        ).length
+                      }
+                      개의 객관식 문제와{" "}
+                      {
+                        quizData.quizzes.filter((q) => q.quizType === "MIX_UP")
+                          .length
+                      }
+                      개의 순서맞추기 문제로 구성되어 있습니다.
                     </p>
-                    <p>{quizData.category} 관련 키워드: {Array.from(new Set(quizData.quizzes.flatMap(q => q.question.split(' ').filter(word => word.length > 2)))).slice(0, 10).join(', ')}</p>
+                    <p>
+                      {quizData.category} 관련 키워드:{" "}
+                      {Array.from(
+                        new Set(
+                          quizData.quizzes.flatMap((q) =>
+                            q.question
+                              .split(" ")
+                              .filter((word) => word.length > 2)
+                          )
+                        )
+                      )
+                        .slice(0, 10)
+                        .join(", ")}
+                    </p>
                   </div>
                 </section>
               )}
-              
+
               <section>
                 <h2>픽토스에서 학습하기</h2>
-                <p>이 퀴즈는 픽토스 플랫폼에서 직접 풀어볼 수 있습니다. AI가 생성한 똑똑한 문제들로 재미있게 학습해보세요.</p>
-                <p>퀴즈를 풀고 나서는 상세한 해설을 통해 더 깊이 있는 학습이 가능합니다.</p>
+                <p>
+                  이 퀴즈는 픽토스 플랫폼에서 직접 풀어볼 수 있습니다. AI가
+                  생성한 똑똑한 문제들로 재미있게 학습해보세요.
+                </p>
+                <p>
+                  퀴즈를 풀고 나서는 상세한 해설을 통해 더 깊이 있는 학습이
+                  가능합니다.
+                </p>
               </section>
             </article>
           ) : (
@@ -442,7 +498,7 @@ export default async function ExploreDetailPage({
             </article>
           )}
         </main>
-        
+
         <footer>
           <p>© 2024 픽토스(PickToss). 모든 권리 보유.</p>
           <p>나를 성장시키는 AI 퀴즈 플랫폼</p>
