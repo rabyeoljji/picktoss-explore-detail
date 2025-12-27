@@ -65,7 +65,7 @@ export async function generateMetadata({
       keywords: keywords,
       authors: [{ name: data.creator }],
       creator: data.creator,
-      publisher: "픽토스(PickToss)",
+      publisher: "픽토스(Picktoss)",
       robots: {
         index: true,
         follow: true,
@@ -82,7 +82,7 @@ export async function generateMetadata({
         description: description,
         type: "article",
         url: `${baseUrl}/explore/detail/${id}`,
-        siteName: "PickToss",
+        siteName: "Picktoss",
         locale: "ko_KR",
         publishedTime: data.createdAt,
         authors: [data.creator],
@@ -131,9 +131,9 @@ export async function generateMetadata({
       title: "픽토스: 나를 성장시키는 AI 퀴즈",
       description: fallbackDescription,
       keywords: "퀴즈, AI 퀴즈, 학습, 교육, 픽토스, picktoss, 온라인 퀴즈",
-      authors: [{ name: "PickToss" }],
-      creator: "PickToss",
-      publisher: "픽토스(PickToss)",
+      authors: [{ name: "Picktoss" }],
+      creator: "Picktoss",
+      publisher: "픽토스(Picktoss)",
       robots: {
         index: true,
         follow: true,
@@ -150,14 +150,14 @@ export async function generateMetadata({
         description: fallbackDescription,
         type: "article",
         url: `${baseUrl}/explore/detail/${id}`,
-        siteName: "PickToss",
+        siteName: "Picktoss",
         locale: "ko_KR",
         images: [
           {
             url: `${baseUrl}/opengraph-quiz.png`,
             width: 1200,
             height: 630,
-            alt: "PickToss - AI 퀴즈 플랫폼",
+            alt: "Picktoss - AI 퀴즈 플랫폼",
             type: "image/png",
           },
         ],
@@ -170,7 +170,7 @@ export async function generateMetadata({
         images: [
           {
             url: `${baseUrl}/opengraph-quiz.png`,
-            alt: "PickToss - AI 퀴즈 플랫폼",
+            alt: "Picktoss - AI 퀴즈 플랫폼",
           },
         ],
       },
@@ -500,7 +500,7 @@ export default async function ExploreDetailPage({
         </main>
 
         <footer>
-          <p>© 2024 픽토스(PickToss). 모든 권리 보유.</p>
+          <p>© 2024 픽토스(Picktoss). 모든 권리 보유.</p>
           <p>나를 성장시키는 AI 퀴즈 플랫폼</p>
         </footer>
       </body>
