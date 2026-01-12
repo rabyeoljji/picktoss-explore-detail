@@ -1,6 +1,7 @@
 import { isbot } from "isbot";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { apiFetch } from "@/lib/api";
 
 export interface GetPublicSingleDocumentQuizDto {
   id: number;
@@ -170,7 +171,9 @@ export async function generateMetadata({
   const normalizedLocale = normalizeLocale(locale);
 
   try {
-    const response = await fetch(`${process.env.API_URL!}/documents/${id}`);
+    const response = await apiFetch(`/documents/${id}`, {
+      locale: normalizedLocale,
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -357,9 +360,9 @@ export default async function ExploreDetailPage({
   let quizData = null;
 
   try {
-    const response = await fetch(
-      `${process.env.API_URL!}/documents/${id}/public`
-    );
+    const response = await apiFetch(`/documents/${id}/public`, {
+      locale: normalizedLocale,
+    });
 
     if (response.ok) {
       const data: GetPublicSingleDocumentResponse = await response.json();
