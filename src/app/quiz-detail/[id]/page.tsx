@@ -35,7 +35,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   try {
-    const response = await apiFetch(`/documents/${id}`, { locale: "en" });
+    const response = await apiFetch(`/documents/${id}/public`, { locale: "en" });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

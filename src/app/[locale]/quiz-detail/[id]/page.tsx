@@ -171,7 +171,7 @@ export async function generateMetadata({
   const normalizedLocale = normalizeLocale(locale);
 
   try {
-    const response = await apiFetch(`/documents/${id}`, {
+    const response = await apiFetch(`/documents/${id}/public`, {
       locale: normalizedLocale,
     });
 
