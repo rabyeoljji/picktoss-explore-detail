@@ -171,7 +171,7 @@ export async function generateMetadata({
   const normalizedLocale = normalizeLocale(locale);
 
   try {
-    const response = await apiFetch(`/documents/${id}/public`, {
+    const response = await apiFetch(`/documents/${id}`, {
       locale: normalizedLocale,
     });
 
@@ -360,7 +360,7 @@ export default async function ExploreDetailPage({
   let quizData = null;
 
   try {
-    const response = await apiFetch(`/documents/${id}/public`, {
+    const response = await apiFetch(`/documents/${id}`, {
       locale: normalizedLocale,
     });
 

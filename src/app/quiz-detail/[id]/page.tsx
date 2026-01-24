@@ -35,7 +35,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   try {
-    const response = await apiFetch(`/documents/${id}/public`, { locale: "en" });
+    const response = await apiFetch(`/documents/${id}`, { locale: "en" });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -240,7 +240,7 @@ export default async function ExploreDetailPage({
   let quizData = null;
 
   try {
-    const response = await apiFetch(`/documents/${id}/public`, {
+    const response = await apiFetch(`/documents/${id}`, {
       locale: "en",
     });
 
